@@ -1,0 +1,426 @@
+Git Repo Initialization on the Project folder
+
+	Create a new repository on GitHub.
+
+	Open Git Bash.
+
+	Change the current working directory to your local project.
+	
+	Initially verify any repo is already generated due to past errors:	git remote -v
+
+	Initialize the local directory as a Git repository. 	$ git init
+	
+	Add the files in your new local repository. This stages them for the first commit.	$ git add .
+	
+	Commit the files that you've staged in your local repository.	$ git commit -m "First commit"
+
+	At the top of your GitHub repository's Quick Setup page, click to copy the remote repository URL.
+
+In the Command prompt, add the URL for the remote repository where your local repository will be pushed.
+
+$ git remote add origin <remote repository URL>
+# Sets the new remote
+
+$ git remote -v
+# Verifies the new remote URL
+
+Push the changes in your local repository to GitHub if there is a remote branch called master (or main if that's what you're using)
+
+$ git push origin master
+Otherwise you will have to name local branch first by
+
+$ git branch -m <new_name>
+and then push it to add a new branch called <new_name>
+
+$ git push origin -u <new_name>
+
+If you still end up with errors like "Updates were rejected because the remote contains work that you do not have locally", this is normally because that the remote repo is recently created manually. Make sure you are not overwriting anything on the remote end before you force push local git folder to it using
+
+$ git push origin -u -f <new_name>
+
+
+Additional commands:
+--------------------
+Rename the local master branch to main
+$ git branch -m master main
+
+Error: 1
+
+	To https://github.com/SivaKakumani/GCP_Pub-Sub.git
+ 	! [rejected]        main -> main (non-fast-forward)
+	error: failed to push some refs to 'https://github.com/SivaKakumani/GCP_Pub-Sub.git'
+	hint: Updates were rejected because the tip of your current branch is behind
+	hint: its remote counterpart. Integrate the remote changes (e.g.
+	hint: 'git pull ...') before pushing again.
+	hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+The error you're seeing happens because the remote main branch has commits that your local main branch doesn't have, and Git prevents you from overwriting those remote changes. To fix this, you need to synchronize your local branch with the remote one before pushing.
+
+Here’s how you can resolve the issue:
+
+1. Fetch and merge the remote changes First, pull the latest changes from the remote main branch:
+
+$ git pull origin main --rebase
+This command fetches the changes from the remote branch and applies them to your local branch, keeping your changes on top (rebasing).
+
+2. Push your local changes after syncing Once you've pulled and resolved any conflicts (if any), you can push your local changes:
+
+$ git push -u origin main
+
+
+Error: 2
+
+$ git push -u origin main
+Enumerating objects: 61, done.
+Counting objects: 100% (61/61), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (59/59), done.
+Writing objects: 100% (60/60), 210.96 KiB | 5.55 MiB/s, done.
+Total 60 (delta 14), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (14/14), done.
+remote: error: GH013: Repository rule violations found for refs/heads/main.
+remote:
+remote: - GITHUB PUSH PROTECTION
+remote:   —————————————————————————————————————————
+remote:     Resolve the following violations before pushing again
+remote:
+remote:     - Push cannot contain secrets
+remote:
+remote:
+remote:      (?) Learn how to resolve a blocked push
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push     
+remote:
+remote:
+remote:       —— Google Cloud Service Account Credentials ——————————
+remote:        locations:
+remote:          - commit: 07e418bf45a2ab689d6e6ab3ac0a4b433166576a
+remote:            path: backend/inductive-album-437718-m8-a99c4bd4d21a.json:1
+remote:
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.  
+remote:        https://github.com/SivaKakumani/GCP_Pub-Sub/security/secret-scanning/unblock-secret/2nY1jdWu7TLjT5Ayn2gsph9qegN
+remote:
+remote:
+remote:
+To https://github.com/SivaKakumani/GCP_Pub-Sub.git
+ ! [remote rejected] main -> main (push declined due to repository rule violations)
+error: failed to push some refs to 'https://github.com/SivaKakumani/GCP_Pub-Sub.git'
+
+
+Answer:
+------
+
+GitHub has blocked your push because it detected sensitive information in your commits, specifically a Google Cloud Service Account JSON key. To resolve this issue, you'll need to remove the secret from the commit history and the repository itself, as GitHub doesn't allow commits with secrets to be pushed.
+
+Here’s how you can resolve the issue:
+
+1. Remove the secret from your repository
+Make sure you've removed the secret file from the repository by editing or deleting it in your working directory. After doing that, you can move on to cleaning up the commit history.
+
+2. Remove the secret from your commit history
+Since the secret still exists in your previous commits, you'll need to rewrite your Git history to completely remove it.
+
+Option 1: Use git rm to remove the file from the repository
+
+$ git rm --cached backend/inductive-album-437718-m8-a99c4bd4d21a.json
+$ git commit --amend --no-edit
+This removes the file from being tracked by Git while leaving it in your working directory.
+
+3. Force push the cleaned commit history
+After cleaning the history, you will need to force push your changes:
+
+
+$ git push origin main --force
+⚠️ Note: Force pushing can overwrite the commit history in the remote repository, so make sure no one else has pulled or worked on this branch, or coordinate with your team.
+
+4. Rotate the compromised secret
+Since the secret was exposed in the repository, it’s crucial to rotate the Google Cloud service account credentials (i.e., generate a new key) to ensure security.
+
+Once you've completed these steps, your push should be accepted by GitHub without issues.
+
+
+HTTP Methods Breakdown in the whole process:
+--------------------------------------------
+
+Let's break down what's happening step by step in your signup, email verification, and sign-in process, looking at the HTTP request methods and responses.
+
+1. Signup Process (/signup)
+HTTP OPTIONS Request:
+
+127.0.0.1 - - [19/Oct/2024 09:21:27] "OPTIONS /signup HTTP/1.1" 200 -
+The OPTIONS request is automatically sent by the browser or client before making certain types of requests (like POST or PUT) to check what HTTP methods the server supports for that endpoint. In this case, it's checking if POST is allowed for /signup.
+
+Status 200 means the server allows POST on this endpoint.
+HTTP POST Request:
+
+127.0.0.1 - - [19/Oct/2024 09:21:27] "POST /signup HTTP/1.1" 200 -
+After the browser confirms that POST is supported, it sends the actual POST request with the signup data (username, email, password, etc.). The Flask backend processes the request:
+
+It checks if the email or username exists in the database.
+It generates a verification token.
+It stores the user data (without setting is_verified to true yet).
+It triggers an event to send a verification email by publishing a message to Google Cloud Pub/Sub.
+A response is sent back with status 200, indicating the signup was successful.
+2. Publishing the Verification Email
+
+Message published with ID: 12705350726962134
+This line shows that a message was successfully published to the Pub/Sub service containing the email and verification token. The message contains the user's email and token, which are used in the verification process.
+
+3. Verification Process (/verify)
+HTTP GET Request:
+
+127.0.0.1 - - [19/Oct/2024 09:22:40] "GET /verify?token=a3af3f61-0b24-4e4d-87b2-ee33223ff836 HTTP/1.1" 200 -
+The user clicks on the verification link sent to their email, which contains a GET request to /verify?token=<token>.
+
+The backend:
+
+Extracts the token from the URL.
+Looks up the user associated with the token in the database.
+If the token is valid (and not expired), it updates the user’s is_verified field to True, marking the account as verified.
+A status 200 response indicates successful email verification.
+
+HTTP GET Request for Favicon:
+
+127.0.0.1 - - [19/Oct/2024 09:22:40] "GET /favicon.ico HTTP/1.1" 404 -
+The browser automatically tries to request the site's favicon, but since no favicon is found, it returns a 404 error. This is not an issue with the application itself.
+
+4. Sign-in Process (/signin)
+HTTP OPTIONS Request:
+
+127.0.0.1 - - [19/Oct/2024 09:23:17] "OPTIONS /signin HTTP/1.1" 200 -
+Similar to the signup process, the browser first sends an OPTIONS request to check if POST is allowed on /signin.
+
+HTTP POST Request:
+
+127.0.0.1 - - [19/Oct/2024 09:23:18] "POST /signin HTTP/1.1" 200 -
+After confirming POST is allowed, the browser sends a POST request with the login credentials (username and password). The backend:
+
+Looks up the user in the database.
+Verifies the password.
+Checks if the user’s email is verified.
+If all checks pass, it generates a JWT token for the session (note the deprecation warning here about datetime.utcnow()).
+Status 200 indicates the sign-in was successful.
+
+5. Accessing a Protected Resource (/protected)
+HTTP OPTIONS Request:
+
+
+127.0.0.1 - - [19/Oct/2024 09:23:19] "OPTIONS /protected HTTP/1.1" 200 -
+The browser checks if it can make requests to /protected.
+
+HTTP GET Request:
+
+
+127.0.0.1 - - [19/Oct/2024 09:23:20] "GET /protected HTTP/1.1" 200 -
+This is a GET request to a protected resource. The backend:
+
+Checks if the request contains a valid JWT token.
+If the token is valid and the user is authenticated, it allows access to the protected resource.
+Status 200 indicates access was granted.
+
+Error: 3 (Frontend to backend connection)
+--------
+27.0.0.1 - - [16/Oct/2024 21:35:07] "OPTIONS /signin HTTP/1.1" 404 -
+127.0.0.1 - - [16/Oct/2024 21:35:48] "OPTIONS /signin HTTP/1.1" 404 -
+ChatGPT said:
+ChatGPT
+The 404 error means that the /signin route is not being recognized by your Flask backend. This typically happens when the route is either missing or there's a mismatch between the frontend request and the defined backend route.
+
+Here are a few things to check and try:
+
+1. Ensure the /signin route exists in app.py:
+Make sure that the signin route is correctly defined in your app.py file. It should look like this:
+
+ 
+Copy code
+@app.route('/signin', methods=['POST'])
+def signin():
+    # Sign-in logic here
+    ...
+2. CORS Configuration:
+Since you’re using Flask-CORS, ensure that CORS is properly set up. This will allow the frontend to make requests to your Flask backend.
+
+Make sure you’ve initialized CORS correctly in your app.py:
+
+ 
+Copy code
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)  # This should enable CORS globally
+You might also want to explicitly allow certain origins, if needed:
+
+ 
+Copy code
+CORS(app, resources={r"/*": {"origins": "*"}})  # Adjust this as needed
+3. Frontend API Request Method:
+Make sure that in your React frontend, you are sending a POST request to /signin and not a different HTTP method (like OPTIONS or GET). The error message shows an OPTIONS request, which typically happens due to preflight requests.
+
+Here is a sample of how to send the correct POST request using Axios in React:
+
+js
+Copy code
+import axios from 'axios';
+
+const handleSignIn = async () => {
+    try {
+        const response = await axios.post('http://localhost:5000/signin', {
+            username: username,
+            password: password
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        console.log(response.data);
+    } catch (error) {
+        console.error('Error during sign in:', error);
+    }
+};
+Make sure the URL and method (POST) are correct. Also, ensure that the backend is running on the expected port (usually http://localhost:5000).
+
+4. Check URL Paths:
+Double-check that your frontend is calling the correct backend URL, especially if there’s any proxy setup. Sometimes, a 404 can occur if the frontend is targeting the wrong base URL.
+
+5. Flask Debug Logs:
+Check if there’s anything in the Flask console log indicating why the route isn’t being found. If Flask doesn’t log the /signin route being registered when the app starts, it might not be added correctly.
+
+Run Flask in debug mode to get more verbose error messages:
+
+python app.py
+If you’re using a different way to run Flask, ensure that it's picking up the latest code changes.
+
+6. Cross-Origin OPTIONS Request (Preflight):
+Browsers will send an OPTIONS request as a "preflight" request to check if the server allows certain headers or methods before making the actual request. Ensure your CORS policy allows OPTIONS requests like this:
+
+
+CORS(app, methods=['GET', 'POST', 'OPTIONS'])
+Final Check:
+If you have tried these and it still shows 404, try restarting both the Flask server and your React frontend, in case there’s an issue with routing or cached code.
+
+Error: 4
+--------
+Access to XMLHttpRequest at 'http://localhost:5000/protected' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.Understand this error
+HomePage.js:24 Authentication failed AxiosError {message: 'Network Error', name: 'AxiosError', code: 'ERR_NETWORK', config: {…}, request: XMLHttpRequest, …}
+HomePage.js:14 
+        
+        
+       GET http://localhost:5000/protected net::ERR_FAILED
+
+The error message you're encountering—Access to XMLHttpRequest at 'http://localhost:5000/protected' from origin 'http://localhost:3000' has been blocked by CORS policy—occurs when the frontend (React) is trying to make a request to the backend (Flask) but is blocked by CORS (Cross-Origin Resource Sharing) rules. Specifically, the server must allow requests from different origins (in this case, from localhost:3000 to localhost:5000).
+
+Why CORS is Blocking Your Request
+
+CORS policy restricts resources on a web server to be requested only from the same domain unless the server explicitly allows requests from other domains (like your frontend at localhost:3000). This is why you're getting a CORS policy error.
+
+Error: 5 
+--------
+127.0.0.1 - - [16/Oct/2024 21:59:57] "OPTIONS /signin HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2024 21:59:58] "POST /signin HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2024 21:59:59] "OPTIONS /protected HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2024 22:00:00] "OPTIONS /protected HTTP/1.1" 200 -
+127.0.0.1 - - [16/Oct/2024 22:00:00] "GET /protected HTTP/1.1" 403 -
+127.0.0.1 - - [16/Oct/2024 22:00:00] "GET /protected HTTP/1.1" 403 -
+
+HomePage.js:24 
+ GET http://localhost:5000/protected 403 (FORBIDDEN)
+
+HomePage.js:34 Authentication failed 
+AxiosError {message: 'Request failed with status code 403', name: 'AxiosError', code: 'ERR_BAD_REQUEST', config: {…}, request: XMLHttpRequest, …}
+﻿
+
+ChatGPT said:
+ChatGPT
+The 403 Forbidden error you're seeing means that the request was successfully sent to your backend, but the backend refused to authorize it. This is likely due to an issue with the JWT authentication or token validation in the /protected route on your backend.
+
+Here’s how to troubleshoot and resolve this issue:
+
+Possible Issues and Solutions
+JWT Token is Missing or Incorrect in the Request: Ensure that the JWT token is properly set in the Authorization header when making the request to /protected. Double-check how the token is stored in localStorage and how it’s being passed in the request.
+
+In your HomePage.js, ensure the token retrieval and setting are correct:
+
+javascript
+Copy code
+axios.get('http://localhost:5000/protected', {
+  headers: {
+    'Authorization': `Bearer ${localStorage.getItem('token')}` // Ensure the token is prefixed with 'Bearer'
+  }
+})
+.then((response) => {
+  console.log(response.data);
+  setAuthenticated(true);
+})
+.catch((error) => {
+  console.log('Authentication failed', error);
+  setErrorMessage('Authentication failed. Please sign in again.');
+  setAuthenticated(false);
+  navigate('/signin');
+});
+Ensure that localStorage.getItem('token') is actually returning a valid token.
+
+Token is Not Properly Verified on Backend: Check your Flask backend's /protected route. Make sure it verifies the JWT token correctly. It should check for the Authorization header and properly decode the token.
+
+Example of how the /protected route should look in app.py:
+
+python
+Copy code
+from functools import wraps
+import jwt
+
+# Function to verify JWT
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        # Get the token from the Authorization header
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].split(" ")[1]  # Expect 'Bearer <token>'
+        
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 403
+
+        try:
+            # Decode the token using the secret key
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            current_user = data['username']  # Extract the username or other user info
+        except:
+            return jsonify({'message': 'Token is invalid!'}), 403
+
+        return f(current_user, *args, **kwargs)
+    return decorated
+
+# Protected route that requires a valid token
+@app.route('/protected', methods=['GET'])
+@token_required
+def protected_route(current_user):
+    return jsonify({'message': f'Welcome {current_user}, you are authenticated!'})
+This route ensures that only requests with a valid JWT token are allowed.
+
+Token Expired: The JWT token might have expired. JWT tokens are often set with an expiration time (e.g., 30 minutes). Make sure the token is still valid and has not expired. In your sign-in route, ensure that the expiration time is correctly set when the token is created:
+
+python
+Copy code
+token = jwt.encode({
+    'username': user['username'],
+    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)  # Expire after 30 minutes
+}, app.config['SECRET_KEY'], algorithm="HS256")
+Ensure the Token in LocalStorage is Not Empty: In HomePage.js, add a check to ensure the token is not null or undefined:
+
+javascript
+Copy code
+const token = localStorage.getItem('token');
+if (!token) {
+  setErrorMessage('Authentication token is missing. Please sign in again.');
+  navigate('/signin');
+  return;
+}
+Steps to Resolve:
+Verify if the JWT token is stored correctly in localStorage after the sign-in.
+
+Check the authorization header in the request to ensure the token is included with the correct format (Bearer <token>).
+
+Ensure the backend is correctly verifying the token using the token_required decorator or similar middleware.
+
+Check the token expiration on both the frontend and backend.
+
+By following these steps, you should be able to resolve the 403 Forbidden error. If the issue persists, let me know the exact behavior so I can help debug further.
