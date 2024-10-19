@@ -1,0 +1,49 @@
+.top-box {
+    width: 100%;
+    background-color: #DBDCED; /* Light color for top box */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 10px 0px; */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo-img {
+    height: 50px; /* Adjust logo size as needed */
+    cursor: pointer;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-name {
+    margin-right: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.user-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Circular user image */
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* Bottom Box */
+.bottom-box {
+    
+
+    width: 100%;
+    background-color:#100E27; /* Light color for top box */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 0px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+

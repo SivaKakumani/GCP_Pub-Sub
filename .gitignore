@@ -1,0 +1,26 @@
+# Python virtual environment (backend)
+backend/venv/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Node.js dependencies (frontend)
+frontend/node_modules/
+
+# Logs and temp files (backend and frontend)
+*.log
+*.tmp
+
+# OS-specific files (optional but useful)
+.DS_Store
+Thumbs.db
+
+# Ignore lock files for specific OS (if present)
+.Python
+.env
+
+# Ignore build output (if present)
+build/
+dist/

@@ -1,0 +1,82 @@
+/* src/components/Signin.css */
+/* src/components/Signup.css */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px); /* Full height minus the header */
+    background-color: #f0f0f0; /* Adjust background as needed */
+  }
+  .signin-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .signin-container {
+      width: 100%;
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .signin-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .signin-container form {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .signin-container form div {
+      margin-bottom: 15px;
+    }
+    
+    .signin-container label {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    
+    .signin-container input[type="text"],
+    .signin-container input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+      width: calc(100% - 22px); /* Proper alignment inside container */
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+    
+    .signin-container button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #41425A;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .signin-container button:hover {
+      background-color:  #DBDCED;
+    }
+    
+    .signin-container p {
+      text-align: center;
+      margin-top: 10px;
+    }
+    
+    .signin-container a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    
+    .signin-container a:hover {
+      text-decoration: underline;
+    }
+    

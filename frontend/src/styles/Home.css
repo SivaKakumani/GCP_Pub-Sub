@@ -1,0 +1,67 @@
+/* src/components/Home.css */
+.home-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
+  }
+  
+  .header {
+    /* display: flex; */
+    justify-content: space-between;
+    align-items: center;
+    background-color: #41425A;
+    /* padding: 10px 20px; */
+    color: white;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .navbar {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .nav-link:hover {
+    text-decoration: underline;
+  }
+  
+  .description {
+    padding: 20px;
+    text-align: center;
+    flex-grow: 1;
+  }
+  
+  .description h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  .description p {
+    font-size: 18px;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
+  .footer-content {
+    font-size: 14px;
+  }
+  
