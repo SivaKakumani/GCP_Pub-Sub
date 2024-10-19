@@ -10,20 +10,10 @@ const HomePage = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    // Get token from localStorage
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      // If no token is found, redirect to sign-in page
-      setErrorMessage('No token found. Please sign in again.');
-      navigate('/signin');
-      return;
-    }
-
-    // Make request to protected route with Authorization header
+    // Check if user is authenticated by making a request to the protected route
     axios.get('http://localhost:5000/protected', {
       headers: {
-        'Authorization': `Bearer ${token}` // Use 'Bearer' format
+        'Authorization': localStorage.getItem('token') // Get the JWT token from localStorage
       }
     })
     .then((response) => {
